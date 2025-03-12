@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Simulator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e9ecef;
+            color: #333;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .atm-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            text-align: center;
+            width: 400px;
+        }
+        .card {
+            background-color: #f0c24b; /* Gold color for AMEX card */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .card p {
+            margin: 5px 0;
+            font-size: 18px;
+        }
+        .balance {
+            font-size: 24px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .menu {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap; /* Allow buttons to wrap */
+        }
+        .menu button {
+            margin: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 150px;
+        }
+        .menu button:hover {
+            background-color: #0056b3;
+        }
+        .model-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .model {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin: 10px;
+            padding: 10px;
+            width: 80%;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .model button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            padding: 8px 12px;
+        }
+        .model button:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<div class="atm-container">
+    <div class="card">
+        <h2>AMEX Centurion Card</h2>
+        <p>Karteninhaber: Lukas</p>
+        <div class="balance">Kontostand: <span id="balance">1.000.000€</span></div>
+    </div>
+    
+    <div class="menu">
+        <button onclick="showDeposit()">Einzahlen</button>
+        <button onclick="showWithdraw()">Auszahlen</button>
+        <button onclick="showCurrency()">Währung ändern</button>
+        <button onclick="showBuyMenu()">Kaufen Menü</button>
+    </div>
+</div>
+
+<div id="itemArea"></div>
+
+<script>
+    let balance = 1000000;  // Startkontostand
+    const currencyRates = {
+        "USD": 1,
+        "EUR": 1,
+        "GBP": 0.85,
+        "JPY": 130,
+        "AUD": 1.6,
+        "CAD": 1.5,
+        "CHF": 0.95,
+        "INR": 90,
+        "CNY": 7.2,
+        "BRL": 5.2
+    };
+
+    function updateBalanceDisplay() {
+        document.getElementById("balance").innerText = balance.toFixed(2) + "€";
+    }
+
+    function showDeposit() {
+        const amount = parseFloat(prompt("Wie viel möchten Sie einzahlen?"));
+        if (!isNaN(amount) && amount > 0) {
+            balance += amount;
+            updateBalanceDisplay();
+            alert(`Sie haben ${amount}€ eingezahlt. Neuer Kontostand: ${balance.toFixed(2)}€`);
+        } else {
+            alert("Ungültige Eingabe.");
+        }
+    }
+
+    function showWithdraw() {
+        const amount = parseFloat(prompt("Wie viel möchten Sie auszahlen?"));
+        if (!isNaN(amount) && amount > 0) {
+            if (amount <= balance) {
+                balance -= amount;
+                updateBalanceDisplay();
+                alert(`Sie haben ${amount}€ ausgezahlt. Neuer Kontostand: ${balance.toFixed(2)}€`);
+            } else {
+                alert("Nicht genügend Guthaben!");
+            }
+        } else {
+            alert("Ungültige Eingabe.");
+        }
+    }
+
+    function showCurrency() {
+        const currency = prompt("Verfügbare Währungen: USD, EUR, GBP, JPY, AUD, CAD, CHF, INR, CNY, BRL\nWählen Sie eine Währung:");
+        if (currency in currencyRates) {
+            const convertedBalance = balance / currencyRates[currency];
+            alert(`Ihr Kontostand in ${currency} beträgt: ${convertedBalance.toFixed(2)} ${currency}`);
+        } else {
+            alert("Ungültige Auswahl!");
+        }
+    }
+
+    function showBuyMenu() {
+        const buyMenuHtml = `
+            <h2>Kaufen Menü</h2>
+            <div class="menu">
+                <button onclick="showBuyCars()">Auto kaufen</button>
+                <button onclick="showBuyWatches()">Uhr kaufen</button>
+                <button onclick="showBuyHouses()">Haus kaufen</button>
+            </div>
+        `;
+        document.getElementById("itemArea").innerHTML = buyMenuHtml;
+    }
+
+    function showBuyCars() {
+        const brands = ["Ferrari", "Lamborghini", "Porsche", "McLaren"];
+        let brandMenuHtml = `<h2>Wählen Sie eine Marke</h2><div class="model-container">`;
+        brands.forEach(brand => {
+            brandMenuHtml += `
+                <div class="model">
+                    <p>${brand}</p>
+                    <button onclick="displayCarModels('${brand}')">Wählen</button>
+                </div>
+            `;
+        });
+        brandMenuHtml += '</div>';
+        document.getElementById("itemArea").innerHTML = brandMenuHtml;
+    }
+
+    function displayCarModels(brand) {
+        const cars = {
+            "Ferrari": [
+                { name: "Ferrari 488", price: 250000 },
+                { name: "Ferrari SF90", price: 500000 },
+                { name: "Ferrari F8", price: 300000 },
+                { name: "Ferrari Roma", price: 220000 },
+                { name: "Ferrari LaFerrari", price: 1500000 }
+            ],
+            "Lamborghini": [
+                { name: "Lamborghini Aventador", price: 400000 },
+                { name: "Lamborghini Huracán", price: 230000 },
+                { name: "Lamborghini Urus", price: 250000 },
+                { name: "Lamborghini Gallardo", price: 150000 },
+                { name: "Lamborghini Revuelto", price: 600000 }
+            ],
+            "Porsche": [
+                { name: "Porsche 911 Turbo", price: 200000 },
+                { name: "Porsche Taycan", price: 150000 },
+                { name: "Porsche Cayenne", price: 120000 },
+                { name: "Porsche Panamera", price: 140000 },
+                { name: "Porsche 918 Spyder", price: 1000000 }
+            ],
+            "McLaren": [
+                { name: "McLaren 720S", price: 300000 },
+                { name: "McLaren P1", price: 1200000 },
+                { name: "McLaren Artura", price: 250000 },
+                { name: "McLaren GT", price: 210000 },
+                { name: "McLaren Senna", price: 1500000 }
+            ]
+        };
+        let modelsHtml = `<h2>${brand} Modelle</h2><div class="model-container">`;
+        cars[brand].forEach(model => {
+            modelsHtml += `
+                <div class="model">
+                    <p>${model.name} - ${model.price}€</p>
+                    <button onclick="buyItem(${model.price}, '${model.name}')">Kaufen</button>
+                </div>
+            `;
+        });
+        modelsHtml += '</div>';
+        document.getElementById("itemArea").innerHTML = modelsHtml;
+    }
+
+    function showBuyWatches() {
+        const brands = ["Rolex", "Audemars Piguet", "Patek Philippe", "Omega"];
+        let brandMenuHtml = `<h2>Wählen Sie eine Marke</h2><div class="model-container">`;
+        brands.forEach(brand => {
+            brandMenuHtml += `
+                <div class="model">
+                    <p>${brand}</p>
+                    <button onclick="displayWatchModels('${brand}')">Wählen</button>
+                </div>
+            `;
+        });
+        brandMenuHtml += '</div>';
+        document.getElementById("itemArea").innerHTML = brandMenuHtml;
+    }
+
+    function displayWatchModels(brand) {
+        const watches = {
+            "Rolex": [
+                { name: "Rolex Submariner", price: 100000 },
+                { name: "Rolex Daytona", price: 150000 },
+                { name: "Rolex Datejust", price: 80000 },
+                { name: "Rolex GMT-Master", price: 120000 },
+                { name: "Rolex Explorer", price: 90000 }
+            ],
+            "Audemars Piguet": [
+                { name: "Audemars Piguet Royal Oak", price: 200000 },
+                { name: "AP Offshore", price: 180000 },
+                { name: "AP Code 11.59", price: 220000 },
+                { name: "AP Millenary", price: 160000 },
+                { name: "AP Jules Audemars", price: 140000 }
+            ],
+            "Patek Philippe": [
+                { name: "Patek Philippe Nautilus", price: 250000 },
+                { name: "Patek Aquanaut", price: 200000 },
+                { name: "Patek Calatrava", price: 180000 },
+                { name: "Patek Complications", price: 270000 },
+                { name: "Patek Golden Ellipse", price: 190000 }
+            ],
+            "Omega": [
+                { name: "Omega Speedmaster", price: 70000 },
+                { name: "Omega Seamaster", price: 60000 },
+                { name: "Omega Constellation", price: 55000 },
+                { name: "Omega De Ville", price: 50000 },
+                { name: "Omega Planet Ocean", price: 65000 }
+            ]
+        };
+        let modelsHtml = `<h2>${brand} Modelle</h2><div class="model-container">`;
+        watches[brand].forEach(model => {
+            modelsHtml += `
+                <div class="model">
+                    <p>${model.name} - ${model.price}€</p>
+                    <button onclick="buyItem(${model.price}, '${model.name}')">Kaufen</button>
+                </div>
+            `;
+        });
+        modelsHtml += '</div>';
+        document.getElementById("itemArea").innerHTML = modelsHtml;
+    }
+
+    function showBuyHouses() {
+        const houses = [
+            { name: "Stadtvilla", price: 750000 },
+            { name: "Penthouse", price: 1200000 },
+            { name: "Luxusvilla am See", price: 3500000 },
+            { name: "Berghütte", price: 500000 }
+        ];
+        displayHouseModels(houses);
+    }
+
+    function displayHouseModels(houses) {
+        let modelsHtml = `<h2>Wählen Sie ein Haus</h2><div class="model-container">`;
+        houses.forEach(model => {
+            modelsHtml += `
+                <div class="model">
+                    <p>${model.name} - ${model.price}€</p>
+                    <button onclick="buyItem(${model.price}, '${model.name}')">Kaufen</button>
+                </div>
+            `;
+        });
+        modelsHtml += '</div>';
+        document.getElementById("itemArea").innerHTML = modelsHtml;
+    }
+
+    function buyItem(price, itemName) {
+        if (balance >= price) {
+            balance -= price;
+            updateBalanceDisplay();
+            alert(`${itemName} für ${price}€ gekauft! Neuer Kontostand: ${balance.toFixed(2)}€`);
+        } else {
+            alert("Nicht genügend Guthaben!");
+        }
+    }
+</script>
+
+</body>
+</html>
