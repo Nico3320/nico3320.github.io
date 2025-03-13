@@ -3,7 +3,7 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #808080; /* Gray background */
+    background-color: black; /* Gray background */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -28,7 +28,7 @@ body {
 
 .nav-links a {
     text-decoration: none;
-    background-color: lightblue; /* Blue Button */
+    background-color: #808080; /* Blue Button */
     
     color: white;
     padding: 15px 30px;
