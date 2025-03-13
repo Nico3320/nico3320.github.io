@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hauptmenü</title>
+    <title>Responsives Hauptmenü</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -11,12 +11,22 @@
             padding: 0;
             background-color: #f4f4f4;
         }
-        .menu {
+        /* Menü-Styling */
+        .menu-container {
             background-color: #333;
-            overflow: hidden;
             display: flex;
-            justify-content: center;
-            padding: 10px 0;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        .menu {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        .menu li {
+            margin: 0;
         }
         .menu a {
             color: white;
@@ -28,16 +38,69 @@
         .menu a:hover {
             background-color: #575757;
         }
+
+        /* Hamburger Menü */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+        .menu-toggle div {
+            width: 30px;
+            height: 4px;
+            background-color: white;
+            margin: 5px 0;
+            transition: 0.3s;
+        }
+
+        /* Responsive Anpassungen */
+        @media (max-width: 768px) {
+            .menu {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                background-color: #333;
+                position: absolute;
+                top: 50px;
+                left: 0;
+                text-align: center;
+            }
+            .menu li {
+                width: 100%;
+            }
+            .menu a {
+                padding: 12px;
+            }
+            .menu-toggle {
+                display: flex;
+            }
+            .menu.active {
+                display: flex;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <nav class="menu">
-        <a href="index.html">Startseite</a>
-        <a href="about.html">Über uns</a>
-        <a href="services.html">Dienstleistungen</a>
-        <a href="contact.html">Kontakt</a>
+    <nav class="menu-container">
+        <div class="menu-toggle" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <ul class="menu">
+            <li><a href="index.html">Startseite</a></li>
+            <li><a href="about.html">Über uns</a></li>
+            <li><a href="services.html">Dienstleistungen</a></li>
+            <li><a href="contact.html">Kontakt</a></li>
+        </ul>
     </nav>
+
+    <script>
+        function toggleMenu() {
+            document.querySelector(".menu").classList.toggle("active");
+        }
+    </script>
 
 </body>
 </html>
