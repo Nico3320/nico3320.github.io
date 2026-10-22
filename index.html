@@ -15,15 +15,19 @@
     background-color: #494D5F;
   }
   img {
-    width: 100%;
+    display: block;
+    width: auto;
     height: auto;
-    transition: transform 0.2s ease;
-    transform-origin: center;
+  
+    max-width: 100%;
+    max-height: 100dvh;
+    object-fit: contain;
 
   }
   img:active {
     transform: scaleX(0.75);
     transform: scaleY(0.5);
+    
   }
   
 </style>
