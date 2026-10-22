@@ -5,6 +5,14 @@
   </head>
   <body>
     <img src="katze.webp">
+
+    <script>
+      document.querySelectorAll("img").forEach(img => {
+        img.addEventListener("contextmenu", e => {
+          e.preventDefault();
+        });
+      });
+    </script>
   </body>
 </html>
 
@@ -34,12 +42,4 @@
   
 </style>
 
-<script>
-  
-  document.querySelectorAll("img").forEach(img => {
-    img.addEventListener("contextmenu", e => {
-      e.preventDefault();
-    });
-  });
 
-</script>
