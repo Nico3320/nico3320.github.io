@@ -4,15 +4,7 @@
     
   </head>
   <body>
-    <img src="katze.webp">
-
-    <script>
-      document.querySelectorAll("img").forEach(img => {
-        img.addEventListener("contextmenu", e => {
-          e.preventDefault();
-        });
-      });
-    </script>
+    <img src="katze.webp" draggable="false" oncontextmenu="return false;">
   </body>
 </html>
 
@@ -27,14 +19,7 @@
     height: 100vh;
     transition: transform 0.2s ease;
     transform-origin: center;
-  
-    /* Disable mobile long-press menu */
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-user-drag: none;
-  
-    touch-action: manipulation;
+
   }
   img:active {
     transform: scaleX(0.5);
