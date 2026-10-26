@@ -4,15 +4,11 @@
     
   </head>
   <body>
-    <img id="bild" src="hat-cat.jpeg" draggable="false" oncontextmenu="return false;">
+    <img id="bild" src="hat-cat.jpeg" draggable="false" onclick="startVideo()" oncontextmenu="return false;">
 
     <video id="video" playsinline preload="auto">
       <source src="katze.mp4" type="video/mp4">
     </video>
-
-    <button id="startButton" onclick="startVideo()">
-      Knopf
-    </button>
     
   </body>
 </html>
@@ -46,11 +42,8 @@
 <script>
   const bild = document.getElementById("bild");
   const video = document.getElementById("video");
-  const button = document.getElementById("startButton");
 
-  startVideo() {
-     button.disabled = true;
-
+  async function startVideo() {
       video.currentTime = 0;
 
       bild.style.display = "none";
@@ -62,7 +55,6 @@
       } catch (error) {
         bild.style.display = "block";
         video.style.display = "none";
-        button.disabled = false;
         
       }
     }
@@ -70,8 +62,6 @@
     video.addEventListener("ended", () => {
       video.style.display = "none";
       bild.style.display = "block";
-
-      button.disabled = false;
     });
   }
   
