@@ -32,10 +32,13 @@
     transform-origin: center;
 
   }
+  video {
+    display: none;
+  }
   /* img:active {
     transform: scaleY(0.5);
     
-  } --> */
+  } */
   
 </style>
 
@@ -44,19 +47,18 @@
   const video = document.getElementById("video");
 
   async function startVideo() {
-      video.currentTime = 0;
+    video.currentTime = 0;
 
-      bild.style.display = "none";
-      video.style.display = "block";
+    bild.style.display = "none";
+    video.style.display = "block";
 
-      try {
-        await video.play();
-        
-      } catch (error) {
-        bild.style.display = "block";
-        video.style.display = "none";
-        
-      }
+    try {
+      await video.play();
+      
+    } catch (error) {
+      bild.style.display = "block";
+      video.style.display = "none";
+      
     }
 
     video.addEventListener("ended", () => {
