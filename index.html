@@ -34,6 +34,10 @@
   }
   video {
     display: none;
+    width: 100%;
+    height: auto;
+    max-height: 100dvh;
+    object-fit: contain;
   }
   /* img:active {
     transform: scaleY(0.5);
@@ -54,16 +58,21 @@
 
     try {
       await video.play();
-      
+      console.log("Video wird abgespielt");
     } catch (error) {
-      bild.style.display = "block";
+      console.error("Videofehler:", error);
+  
       video.style.display = "none";
-      
+      bild.style.display = "block";
     }
 
     video.addEventListener("ended", () => {
       video.style.display = "none";
       bild.style.display = "block";
+    });
+    
+    video.addEventListener("error", () => {
+      console.error("Video konnte nicht geladen werden:", video.error);
     });
   }
   
